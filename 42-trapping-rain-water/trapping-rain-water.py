@@ -2,20 +2,22 @@ from typing import List
 
 class Solution:
     def trap(self, height: List[int]) -> int:
-        n = len(height)
-        arr = [0] * n
+        left, right = 0, len(height) - 1
+        left_max = right_max = 0
         ans = 0
 
-        arr[0] = height[0]
-        for i in range(1, n):
-            arr[i] = max(arr[i-1], height[i])
-
-        right_max = height[n-1]
-        for i in range(n-1, -1, -1):
-            right_max = max(right_max, height[i])
-            arr[i] = min(arr[i], right_max)
-
-        for i in range(n):
-            ans += arr[i] - height[i]
+        while left < right:
+            if height[left] < height[right]:
+                if height[left] >= left_max:
+                    left_max = height[left]
+                else:
+                    ans += left_max - height[left]
+                left += 1
+            else:
+                if height[right] >= right_max:
+                    right_max = height[right]
+                else:
+                    ans += right_max - height[right]
+                right -= 1
 
         return ans
